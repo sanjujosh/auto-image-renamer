@@ -9,7 +9,7 @@ from os import listdir
 from os.path import isfile, join
 import http.client as httplib
 
-MICROSOFT_VISION_API_KEY = '00173bdab25947729526c81a26e791a7'
+MICROSOFT_VISION_API_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 ALLOWED_IMAGE_EXTENSIONS = ['.jpeg', '.jpg', '.png']
 
 
