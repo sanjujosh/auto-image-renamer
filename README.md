@@ -3,13 +3,12 @@ Rename images using deep learning
 
 ![Image for demo](images/gif.gif)
 
-Auto-image-renamer automates the task of renaming image names with meaningful names. It uses Microsoft Computer Vision API's deep learning algorithms to rename the file
+Auto-image-renamer automates the task of renaming images with meaningful names. It uses Microsoft Computer Vision API's deep learning algorithms to rename the images
 
-Notice: Altify will now ignore any image tag whose alt attribute has content or is just an empty string. (In compliance with standard web practices)
 
 ## Dependencies
 
-- Python 3.5 
+- Python 3.5 (Tested under Ubuntu Python 3.5) 
 
 
 ## Usage 
@@ -18,12 +17,13 @@ Notice: Altify will now ignore any image tag whose alt attribute has content or 
 [https://www.microsoft.com/cognitive-services/en-us/sign-up](https://www.microsoft.com/cognitive-services/en-us/sign-up "API Key").
 
 
-
-### 2) Use
+### 2) Usage
 
 `python3 renamer.py path_to_images_dir`
 
 NOTICE: Do not use a triling slash in dir
+
+EXAMPLE `python3 renamer.py /home/sanju/images`
 
 ### 4) Enjoy!
 
@@ -39,8 +39,8 @@ All the images in the given directory will be renamed with meaningful names now.
 
 ## Disclaimer
 
-It uses uploads.im api to stream the files, do not use it with personal files. 
+It uses uploads.im api to stream the files, do not use it with personal images. 
 
 ## Credits
 
-Originally inspired by https://github.com/ParhamP/altify
+Originally inspired from https://github.com/ParhamP/altify
