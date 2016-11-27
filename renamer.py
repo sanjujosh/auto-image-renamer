@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
+import sys
 import os
 import json
 import urllib
@@ -7,7 +10,21 @@ import argparse
 import requests
 from os import listdir
 from os.path import isfile, join
-import http.client as httplib
+
+_ver = sys.version_info
+# Python 2.6+
+is_py2 = (_ver[0] == 2)
+# Python 3.x
+is_py3 = (_ver[0] == 3)
+
+if is_py2:
+    from urllib import urlencode
+    import httplib
+
+if is_py3:
+    from urllib.parse import urlencode
+    import http.client as httplib
+
 
 MICROSOFT_VISION_API_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 ALLOWED_IMAGE_EXTENSIONS = ['.jpeg', '.jpg', '.png']
@@ -45,7 +62,7 @@ def get_caption(image_src):
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': MICROSOFT_VISION_API_KEY,
     }
-    params = urllib.parse.urlencode({
+    params = urlencode({
         'maxCandidates': '1',
     })
     data = json.dumps({"Url": image_src}, separators=(',', ':'))
