@@ -57,15 +57,15 @@ def rename_img(old, new, base_dir):
         print("Renaming ", old, "to ",  new + ext)
 
 
-def get_caption(image_src):
+def get_caption(image_file):
     headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/octet-stream',
         'Ocp-Apim-Subscription-Key': MICROSOFT_VISION_API_KEY,
     }
     params = urlencode({
         'maxCandidates': '1',
     })
-    data = json.dumps({"Url": image_src}, separators=(',', ':'))
+    data = open(image_file, 'rb')
     try:
         conn = httplib.HTTPSConnection('api.projectoxford.ai')
         conn.request("POST", "/vision/v1.0/describe?%s" % params, data, headers)
@@ -79,17 +79,6 @@ def get_caption(image_src):
         print("Exception while communicating with vision api- ", e)
 
 
-def upload(image_address):
-    if is_exists(image_address):
-        url = "http://uploads.im/api"
-        files = {'media': open(image_address, 'rb')}
-        request = requests.post(url, files=files)
-        data = json.loads(request.text)
-        image_url = data[u'data'][u'img_url']
-        main_url = image_url.encode('ascii', 'ignore')
-        return main_url.decode('utf-8')
-
-
 def full_path(base, file):
     return base + "/" + file
 
@@ -99,8 +88,7 @@ def init(dir):
     for image in images:
         file = full_path(dir, image)
         print("Processing image - ", image)
-        image_url = upload(file)
-        new_name = get_caption(image_url)
+        new_name = get_caption(file)
         rename_img(file, new_name, dir)
 
 
