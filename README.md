@@ -8,7 +8,7 @@ Auto-image-renamer automates the task of renaming images with meaningful names. 
 
 ## Dependencies
 
-- Python 3.5 (Tested under Ubuntu Python 3.5) 
+- Python 2/3 (Tested under Ubuntu Python 3.5) 
 
 
 ## Usage 
@@ -34,13 +34,13 @@ All the images in the given directory will be renamed with meaningful names now.
 ## How It was Built
 
 1. Find all the images in the given directory
-2. Stream images using uploads.im API, and then with its URL, send request to Microsoft's API to caption.
+2. Images will be sent to microsoft API, they process the image and sent back a caption.
 3. Rename the files with new name from the VISION API
 
 
 ## Disclaimer
 
-It uses uploads.im api to stream the files, do not use it with personal images. 
+It uplods the images to Microsoft servers, do not use it with personal images. (or use it with caution) 
 
 ## Credits
 
