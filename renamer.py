@@ -26,7 +26,7 @@ if is_py3:
     import http.client as httplib
 
 
-MICROSOFT_VISION_API_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+MICROSOFT_VISION_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 ALLOWED_IMAGE_EXTENSIONS = ['.jpeg', '.jpg', '.png']
 
 
@@ -76,7 +76,7 @@ def get_caption(image_file):
         conn.close()
         return caption_text
     except Exception as e:
-        print("Exception while communicating with vision api- ", e)
+        print("Exception while communicating with vision api- ", str(e))
 
 
 def full_path(base, file):
@@ -105,3 +105,4 @@ def arg_parser():
 
 if __name__ == '__main__':
     arg_parser()
+
