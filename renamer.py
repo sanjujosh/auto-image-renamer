@@ -1,32 +1,17 @@
 #!/usr/bin/env python
 
-from __future__ import print_function
-
-import sys
-import os
-import json
-import urllib
 import argparse
-import requests
+import http.client
+import json
+import os
+import urllib.parse
 from os import listdir
 from os.path import isfile, join
 
-_ver = sys.version_info
-# Python 2.6+
-is_py2 = (_ver[0] == 2)
-# Python 3.x
-is_py3 = (_ver[0] == 3)
-
-if is_py2:
-    from urllib import urlencode
-    import httplib
-
-if is_py3:
-    from urllib.parse import urlencode
-    import http.client as httplib
-
-
+# Change here
 MICROSOFT_VISION_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+MICROSOFT_VISION_API_ENDPOINT = 'eastus.api.cognitive.microsoft.com'
+
 ALLOWED_IMAGE_EXTENSIONS = ['.jpeg', '.jpg', '.png']
 
 
@@ -38,9 +23,9 @@ def is_exists(path):
         return False
 
 
-def get_all_images(dir):
-    if is_exists(dir):
-        files = [f for f in listdir(dir) if isfile(join(dir, f))]
+def get_all_images(directory):
+    if is_exists(directory):
+        files = [f for f in listdir(directory) if isfile(join(directory, f))]
         images = [f for f in files for ext in ALLOWED_IMAGE_EXTENSIONS if f.lower().endswith(ext.lower())]
         return images
 
@@ -53,8 +38,8 @@ def get_extension(file):
 def rename_img(old, new, base_dir):
     if is_exists(old):
         ext = get_extension(old).lower()
-        os.rename(old, join(base_dir,new + ext))
-        print("Renaming ", old, "to ",  new + ext)
+        os.rename(old, join(base_dir, new + ext))
+        print("Renaming ", old, "to ", new + ext)
 
 
 def get_caption(image_file):
@@ -62,16 +47,19 @@ def get_caption(image_file):
         'Content-Type': 'application/octet-stream',
         'Ocp-Apim-Subscription-Key': MICROSOFT_VISION_API_KEY,
     }
-    params = urlencode({
+
+    params = urllib.parse.urlencode({
         'maxCandidates': '1',
+        'language': 'en',
+        'model-version': 'latest',
     })
     data = open(image_file, 'rb')
     try:
-        conn = httplib.HTTPSConnection('api.projectoxford.ai')
-        conn.request("POST", "/vision/v1.0/describe?%s" % params, data, headers)
+        conn = http.client.HTTPSConnection(MICROSOFT_VISION_API_ENDPOINT)
+        conn.request("POST", "/vision/v3.2/describe?%s" % params, data, headers)
         response = conn.getresponse()
-        response_data = response.read().decode('utf-8')
-        json_data = json.loads(response_data)
+        data = response.read()
+        json_data = json.loads(data)
         caption_text = json_data['description']['captions'][0]['text']
         conn.close()
         return caption_text
@@ -83,13 +71,13 @@ def full_path(base, file):
     return base + "/" + file
 
 
-def init(dir):
-    images = get_all_images(dir)
+def init(directory):
+    images = get_all_images(directory)
     for image in images:
-        file = full_path(dir, image)
+        file = full_path(directory, image)
         print("Processing image - ", image)
         new_name = get_caption(file)
-        rename_img(file, new_name, dir)
+        rename_img(file, new_name, directory)
 
 
 def arg_parser():
@@ -105,4 +93,3 @@ def arg_parser():
 
 if __name__ == '__main__':
     arg_parser()
-
